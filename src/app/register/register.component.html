@@ -1,0 +1,27 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name">
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input id="email" type="email" formControlName="email">
+  </div>
+  <div>
+    <label for="mobile">Mobile:</label>
+    <input id="mobile" type="tel" formControlName="mobile">
+  </div>
+  <button type="submit" [disabled]="!registerForm.valid">Submit</button>
+</form>
+
+<div *ngIf="customers.length > 0; else noCustomers">
+  <h2>Registered Customers</h2>
+  <ul>
+    <li *ngFor="let customer of customers">
+      {{ customer.name }} - {{ customer.email }} - {{ customer.mobile }}
+    </li>
+  </ul>
+</div>
+<ng-template #noCustomers>
+  <p>No customers registered yet.</p>
+</ng-template>
