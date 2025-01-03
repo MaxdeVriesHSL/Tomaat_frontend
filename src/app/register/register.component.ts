@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from "@angular/common";
 import {DatabaseService} from "../services/database-service";
-import {Customer} from "../models/customer.model";
+import {User} from "../models/user.model";
 
 @Component({
   selector: 'app-register',
@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
   }
 
   registerForm: FormGroup;
-  customers: Customer[] = [];
+  users: User[] = [];
 
   constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
     this.registerForm = this.fb.group({
@@ -48,8 +48,8 @@ export class RegisterComponent implements OnInit {
 
   getCustomers() {
     this.databaseService.getAllCustomers().subscribe(
-      (customers: Customer[]) => {
-        this.customers = customers;
+      (customers: User[]) => {
+        this.users = customers;
         // Do something with the list of customers
       },
       (error) => {

@@ -8,20 +8,22 @@
     <input id="email" type="email" formControlName="email">
   </div>
   <div>
-    <label for="mobile">Mobile:</label>
-    <input id="mobile" type="tel" formControlName="mobile">
+    <label for="password">Password:</label>
+<!--    <input id="password" type="password" formControlName="password">-->
+    <input id="password" formControlName="password">
   </div>
+
   <button type="submit" [disabled]="!registerForm.valid">Submit</button>
 </form>
 
-<div *ngIf="customers.length > 0; else noCustomers">
-  <h2>Registered Customers</h2>
+<div *ngIf="users.length > 0; else noUsers">
+  <h2>Registered Users</h2>
   <ul>
-    <li *ngFor="let customer of customers">
-      {{ customer.name }} - {{ customer.email }} - {{ customer.mobile }}
+    <li *ngFor="let user of users">
+      {{ user.name }} - {{ user.email }} - {{ user.password}}
     </li>
   </ul>
 </div>
-<ng-template #noCustomers>
-  <p>No customers registered yet.</p>
+<ng-template #noUsers>
+  <p>No users registered yet.</p>
 </ng-template>

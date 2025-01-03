@@ -3,7 +3,7 @@ import {HttpClient, HttpStatusCode} from '@angular/common/http';
 // @ts-ignore
 import {JsonArray, JsonObject} from '@angular/compiler-cli/ngcc/src/utils';
 import {Observable} from "rxjs";
-import {Customer} from "../models/customer.model";
+import {User} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class DatabaseService {
         });
     }
 
-  public getAllCustomers(): Observable<Customer[]> {
-    return this.http.get<Customer[]>(`${this.baseUrl}/customer`);
+  public getAllCustomers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/customer`);
   }
 }
