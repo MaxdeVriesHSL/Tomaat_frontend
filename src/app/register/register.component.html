@@ -1,29 +1,50 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="name">Name:</label>
-    <input id="name" type="text" formControlName="name">
-  </div>
-  <div>
-    <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email">
-  </div>
-  <div>
-    <label for="password">Password:</label>
-<!--    <input id="password" type="password" formControlName="password">-->
-    <input id="password" formControlName="password">
-  </div>
+<div class="container mx-auto max-w-md p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">User Registration</h2>
 
-  <button type="submit" [disabled]="!registerForm.valid">Submit</button>
-</form>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="space-y-2">
+            <label for="name" class="block text-sm font-medium">Name</label>
+            <input id="name" type="text" formControlName="name"
+                   class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid"
+                 class="text-red-500 text-sm">Name is required</div>
+        </div>
 
-<div *ngIf="users.length > 0; else noUsers">
-  <h2>Registered Users</h2>
-  <ul>
-    <li *ngFor="let user of users">
-      {{ user.name }} - {{ user.email }} - {{ user.password}}
-    </li>
-  </ul>
+        <div class="space-y-2">
+            <label for="email" class="block text-sm font-medium">Email</label>
+            <input id="email" type="email" formControlName="email"
+                   class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+                 class="text-red-500 text-sm">Please enter a valid email</div>
+        </div>
+
+        <div class="space-y-2">
+            <label for="password" class="block text-sm font-medium">Password</label>
+            <input id="password" type="tel" formControlName="password"
+                   class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+                 class="text-red-500 text-sm">Please enter a valid password</div>
+        </div>
+
+        <button type="submit" [disabled]="!registerForm.valid"
+                class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed">
+            Register
+        </button>
+    </form>
+
+    <div *ngIf="users.length > 0" class="mt-8">
+        <h3 class="text-xl font-bold mb-4">Registered Users</h3>
+        <div class="space-y-2">
+            <div *ngFor="let user of users"
+                 class="p-3 bg-gray-50 rounded border">
+                <div class="font-medium">{{user.name}}</div>
+                <div class="text-sm text-gray-600">{{user.email}}</div>
+                <div class="text-sm text-gray-600">{{user.password}}</div>
+            </div>
+        </div>
+    </div>
+
+    <p *ngIf="users.length === 0" class="mt-4 text-center text-gray-500">
+        No users registered yet
+    </p>
 </div>
-<ng-template #noUsers>
-  <p>No users registered yet.</p>
-</ng-template>

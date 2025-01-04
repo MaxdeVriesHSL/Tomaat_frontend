@@ -18,7 +18,7 @@ import {User} from "../models/user.model";
 export class RegisterComponent implements OnInit {
   ngOnInit() {
     console.log('RegisterComponent initialized');
-    this.getCustomers();
+    this.getUsers();
   }
 
   registerForm: FormGroup;
@@ -28,32 +28,33 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      mobile: ['', [Validators.required, Validators.pattern("^[0-9]{10}$")]]
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+      ]]
     });
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Form submitted:', this.registerForm.value);
-      // Here you can call your method to handle the form submission
       this.handleRegistration(this.registerForm.value);
     }
   }
 
   handleRegistration(formData: FormGroup) {
-    // Implement your registration logic here
     this.databaseService.registerUser(formData);
     console.log('Registration data:', formData);
   }
 
-  getCustomers() {
-    this.databaseService.getAllCustomers().subscribe(
-      (customers: User[]) => {
-        this.users = customers;
-        // Do something with the list of customers
+  getUsers() {
+    this.databaseService.getAllUsers().subscribe(
+      (users: User[]) => {
+        this.users = users;
       },
       (error) => {
-        console.error('Error retrieving customers:', error);
+        console.error('Error retrieving users:', error);
       }
     );
   }

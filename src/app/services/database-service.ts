@@ -10,7 +10,7 @@ import {User} from "../models/user.model";
 })
 export class DatabaseService {
   baseUrl = 'http://localhost:8080'
-  registerUrl = `${this.baseUrl}/customer`;
+  registerUrl = `${this.baseUrl}/user`;
 
 
   constructor(private http: HttpClient) {
@@ -23,7 +23,7 @@ export class DatabaseService {
         });
     }
 
-  public getAllCustomers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/customer`);
+  public getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/user`);
   }
 }
