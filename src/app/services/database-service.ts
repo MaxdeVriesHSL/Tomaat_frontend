@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpStatusCode} from '@angular/common/http';
-// @ts-ignore
-import {JsonArray, JsonObject} from '@angular/compiler-cli/ngcc/src/utils';
+import {HttpClient, HttpResponse, HttpHeaders} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {User} from "../models/user.model";
 
@@ -10,20 +8,28 @@ import {User} from "../models/user.model";
 })
 export class DatabaseService {
   baseUrl = 'http://localhost:8080'
-  registerUrl = `${this.baseUrl}/user`;
+  registerUrl = `${this.baseUrl}/auth/register`;
+  loginUrl = `${this.baseUrl}/auth/login`;
+  usersUrl = `${this.baseUrl}/user`;
 
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) {
+  public registerUser(postData: any): Observable<HttpResponse<any>> {
+    return this.http.post(this.registerUrl, postData, { observe: 'response' });
   }
-    public registerUser(postData: JsonObject) {
-      this.http
-        .post(this.registerUrl, postData, {observe: 'response'})
-        .subscribe(resp => {
-          console.log(resp.body);
-        });
-    }
+
+  public loginUser(credentials: {email: string, password: string}): Observable<HttpResponse<any>> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(this.loginUrl, credentials, {
+      headers: headers,
+      observe: 'response'
+    });
+  }
 
   public getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}/user`);
+    return this.http.get<User[]>(this.usersUrl);
   }
 }

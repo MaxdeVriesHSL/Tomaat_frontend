@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {CommonModule} from "@angular/common";
+import {Router} from '@angular/router';
 import {DatabaseService} from "../services/database-service";
 import {User} from "../models/user.model";
 
@@ -12,19 +13,18 @@ import {User} from "../models/user.model";
   imports: [
     ReactiveFormsModule,
     CommonModule,
-  ],
-  providers: [DatabaseService]
+  ]
 })
 export class RegisterComponent implements OnInit {
-  ngOnInit() {
-    console.log('RegisterComponent initialized');
-    this.getUsers();
-  }
-
   registerForm: FormGroup;
   users: User[] = [];
+  registrationError: string = '';
 
-  constructor(private databaseService: DatabaseService, private fb: FormBuilder) {
+  constructor(
+      private databaseService: DatabaseService,
+      private fb: FormBuilder,
+      private router: Router
+  ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -36,6 +36,11 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  ngOnInit() {
+    console.log('RegisterComponent initialized');
+    this.getUsers();
+  }
+
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Form submitted:', this.registerForm.value);
@@ -43,19 +48,36 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  handleRegistration(formData: FormGroup) {
-    this.databaseService.registerUser(formData);
-    console.log('Registration data:', formData);
+  handleRegistration(formData: any) {
+    this.databaseService.registerUser(formData).subscribe(
+        (response) => {
+          if (response.status === 200 || response.status === 201 || response.status === 202 ) {
+            console.log('Registration successful', response.body);
+            if (response.body && response.body['jwt-token']) {
+              localStorage.setItem('jwt-token', response.body['jwt-token']);
+            }
+            this.router.navigate(['/login']);
+          }
+        },
+        (error) => {
+          console.error('Registration error', error);
+          if (error.error && error.error.message) {
+            this.registrationError = error.error.message;
+          } else {
+            this.registrationError = 'Registration failed. Please try again.';
+          }
+        }
+    );
   }
 
   getUsers() {
     this.databaseService.getAllUsers().subscribe(
-      (users: User[]) => {
-        this.users = users;
-      },
-      (error) => {
-        console.error('Error retrieving users:', error);
-      }
+        (users: User[]) => {
+          this.users = users;
+        },
+        (error) => {
+          console.error('Error retrieving users:', error);
+        }
     );
   }
 }
