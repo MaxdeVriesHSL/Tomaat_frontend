@@ -8,14 +8,15 @@ import {provideHttpClient} from "@angular/common/http";
 import {LoginComponent} from "./app/login/login.component";
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+    {path: '', component: HomeComponent},
+    {path: 'register', component: RegisterComponent},
+    {path: 'login', component: LoginComponent},
+    {path: 'home', component: HomeComponent},
 ];
 
 bootstrapApplication(AppComponent, {
-  providers: [
-    provideRouter(routes),
-    provideHttpClient()
-  ]
+    providers: [
+        provideRouter(routes),
+        provideHttpClient()
+    ]
 }).catch(err => console.error(err));
