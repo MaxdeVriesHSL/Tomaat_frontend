@@ -48,17 +48,13 @@ export class LoginComponent implements OnInit {
             if (response.body && response.body['jwt-token']) {
               localStorage.setItem('jwt-token', response.body['jwt-token']);
 
-              if (response.body['temporary-password']) {
-                console.warn('Temporary password used');
-              }
             }
-            this.router.navigate(['/home']);
+            this.router.navigate(['/register']);
           }
         },
         (error: HttpErrorResponse) => {
           console.error('Login error', error);
 
-          // More detailed error handling
           if (error.status === 401) {
             this.loginError = 'Invalid email or password';
           } else if (error.status === 0) {

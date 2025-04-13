@@ -30,6 +30,12 @@ export class DatabaseService {
   }
 
   public getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl);
+    const token = localStorage.getItem('jwt-token');
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<User[]>(this.usersUrl, { headers });
   }
 }
