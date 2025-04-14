@@ -1,0 +1,82 @@
+.beer-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.beer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.beer-card .image-container {
+    overflow: hidden;
+}
+
+.beer-card img {
+    transition: transform 0.3s ease;
+}
+
+.beer-card:hover img {
+    transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.filter-button {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filter-button:hover:not(.active) {
+    background-color: #f3f4f6;
+}
+
+.filter-button.active {
+    background-color: #ef4444;
+    color: white;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.hero-gradient {
+    background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%);
+}
+
+.price-tag {
+    font-weight: 600;
+    color: #dc2626;
+}
+
+.stock-high {
+    color: #16a34a;
+}
+
+.stock-medium {
+    color: #f59e0b;
+}
+
+.stock-low {
+    color: #dc2626;
+}

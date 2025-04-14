@@ -1,1 +1,117 @@
-<p>home works!</p>
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-gradient-to-r from-red-50 to-yellow-50 rounded-lg p-8 mb-8 shadow-md">
+        <h1 class="tomaat-title text-3xl font-bold text-red-700 mb-4">Welcome to Brouwerij De Tomaat</h1>
+        <p class="text-red-600 mb-6">Discover exceptional craft beers from The Hague's premier brewery.</p>
+        <div class="flex flex-wrap gap-4">
+            <button
+                    class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+                    (click)="scrollToBeers()">
+                Browse Collection
+            </button>
+            <a
+                    *ngIf="!isLoggedIn()"
+                    href="/login"
+                    class="bg-white text-red-600 border border-red-600 px-6 py-2 rounded hover:bg-red-50 transition">
+                Log In
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg p-6 mb-8 shadow-md">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div class="mb-4 md:mb-0">
+                <h2 class="text-xl font-semibold text-gray-800 mb-2">Filter Collection</h2>
+                <div class="flex flex-wrap gap-2">
+                    <button
+                            class="px-4 py-1 rounded text-sm transition-colors"
+                            [ngClass]="{'bg-red-600 text-white': selectedType === '', 'bg-gray-200 text-gray-800 hover:bg-gray-300': selectedType !== ''}"
+                            (click)="filterByType('')">
+                        All
+                    </button>
+                    <button
+                            *ngFor="let type of beerTypes"
+                            class="px-4 py-1 rounded text-sm transition-colors"
+                            [ngClass]="{'bg-red-600 text-white': selectedType === type, 'bg-gray-200 text-gray-800 hover:bg-gray-300': selectedType !== type}"
+                            (click)="filterByType(type)">
+                        {{ type }}
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <label for="sort" class="mr-2 text-gray-700">Sort by:</label>
+                <select
+                        id="sort"
+                        class="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                        [(ngModel)]="sortOption"
+                        (change)="applySorting()">
+                    <option value="name">Name (A-Z)</option>
+                    <option value="nameDesc">Name (Z-A)</option>
+                    <option value="priceLow">Price (Low to High)</option>
+                    <option value="priceHigh">Price (High to Low)</option>
+                    <option value="alcoholLow">Alcohol % (Low to High)</option>
+                    <option value="alcoholHigh">Alcohol % (High to Low)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="flex justify-center my-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+    </div>
+
+    <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-8">
+        <p>{{ errorMessage }}</p>
+        <button (click)="loadBeers()" class="mt-2 underline">Try again</button>
+    </div>
+
+    <!-- Beer-->
+    <div id="beerCollection" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div *ngFor="let beer of displayedBeers" class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition beer-card">
+            <div class="h-48 overflow-hidden relative">
+                <img
+                        [src]="beer.imageUrl || 'assets/default-beer.jpg'"
+                        [alt]="beer.name"
+                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                        (error)="onImageError($event)">
+                <div *ngIf="beer.stockQuantity <= 0" class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                    Out of Stock
+                </div>
+                <div *ngIf="beer.stockQuantity > 0 && beer.stockQuantity < 10" class="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded">
+                    Low Stock: {{ beer.stockQuantity }}
+                </div>
+                <div *ngIf="beer.stockQuantity >= 10" class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                    Stock: {{ beer.stockQuantity }}
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800">{{ beer.name }}</h3>
+                    <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">{{ beer.alcoholPercentage }}%</span>
+                </div>
+                <p class="text-xs text-gray-500 mb-3">{{ beer.type }}</p>
+                <p class="text-sm text-gray-700 mb-4 h-12 overflow-hidden">{{ beer.description | slice:0:80 }}{{ beer.description.length > 80 ? '...' : '' }}</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-lg font-bold text-red-600">€{{ beer.price.toFixed(2) }}</span>
+                    <button
+                            (click)="addToCart(beer)"
+                            [disabled]="beer.stockQuantity <= 0 || !isLoggedIn()"
+                            [title]="!isLoggedIn() ? 'Please log in to add items to cart' : (beer.stockQuantity <= 0 ? 'Out of stock' : '')"
+                            class="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        {{ isLoggedIn() ? 'Add to Cart' : 'Login to Add' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- If empty -->
+    <div *ngIf="displayedBeers.length === 0 && !loading && !errorMessage" class="bg-gray-100 rounded-lg p-8 text-center my-12">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">No beers found</h3>
+        <p class="text-gray-600 mb-4">Try changing your filters or check back later for new arrivals.</p>
+        <button (click)="resetFilters()" class="text-red-600 underline">Reset filters</button>
+    </div>
+</div>
