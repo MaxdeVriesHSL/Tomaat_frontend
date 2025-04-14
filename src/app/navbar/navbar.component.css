@@ -1,0 +1,84 @@
+nav {
+    transition: all 0.3s ease;
+}
+
+.tomaat-title {
+    font-family: 'Broadway', 'system-ui', sans-serif;
+    font-weight: bold;
+    color: #fde68a;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+nav a, nav button {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+nav a:not(.logo-link)::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #fde68a;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+nav a:hover::after {
+    width: 80%;
+    left: 10%;
+    opacity: 1;
+}
+
+nav a.active {
+    color: #fef3c7;
+    font-weight: 500;
+}
+
+nav a.active::after {
+    width: 80%;
+    left: 10%;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+.mobile-menu-button {
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-button:hover {
+    transform: rotate(90deg);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mobile-menu-open {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.cart-badge {
+    animation: pulse 2s infinite;
+}
+
+.cart-link:hover .cart-badge {
+    animation: pulse 0.5s ease-in-out;
+}
