@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Beer } from '../models/beer.model';
-import { Cart } from '../models/cart.model';
-import { AuthService } from './auth.service';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Beer} from '../models/beer.model';
+import {Cart} from '../models/cart.model';
+import {AuthService} from './auth.service';
 
 @Injectable({
     providedIn: 'root'
@@ -50,7 +50,7 @@ export class CartService {
             if (effectiveQuantity <= 0) {
                 return false;
             }
-            this.cart.items.push({ beer, quantity: effectiveQuantity });
+            this.cart.items.push({beer, quantity: effectiveQuantity});
         }
 
         this.updateCartTotals();
@@ -88,7 +88,7 @@ export class CartService {
     private updateCartTotals(): void {
         this.cart.totalItems = this.cart.items.reduce((total, item) => total + item.quantity, 0);
         this.cart.totalPrice = this.cart.items.reduce((total, item) => total + (item.beer.price * item.quantity), 0);
-        this.cartSubject.next({ ...this.cart });
+        this.cartSubject.next({...this.cart});
     }
 
     private saveCartToStorage(): void {

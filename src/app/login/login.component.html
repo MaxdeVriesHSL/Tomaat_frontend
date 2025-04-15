@@ -14,7 +14,8 @@
                         formControlName="email"
                         class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500">
                 <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
-                     class="text-red-500 text-xs mt-1">Please enter a valid email</div>
+                     class="text-red-500 text-xs mt-1">Please enter a valid email
+                </div>
             </div>
 
             <div class="space-y-2">
@@ -25,7 +26,8 @@
                         formControlName="password"
                         class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-red-500">
                 <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
-                     class="text-red-500 text-xs mt-1">Password is required</div>
+                     class="text-red-500 text-xs mt-1">Password is required
+                </div>
             </div>
 
             <div *ngIf="loginError" class="text-red-500 text-sm text-center">

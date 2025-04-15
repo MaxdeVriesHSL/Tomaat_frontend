@@ -1,38 +1,50 @@
 <nav class="bg-red-700 text-white shadow-md">
-  <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center h-16">
-      <div class="flex items-center">
-        <a routerLink="/" class="flex items-center">
-          <span class="tomaat-title text-xl font-bold">De Tomaat</span>
-        </a>
-      </div>
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center">
+                <a routerLink="/" class="flex items-center">
+                    <span class="tomaat-title text-xl font-bold">De Tomaat</span>
+                </a>
+            </div>
 
-      <div class="hidden md:flex items-center space-x-4">
-        <a routerLink="/home" routerLinkActive="text-yellow-300" class="py-2 px-3 hover:text-yellow-200 transition-colors">Home</a>
-        <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="text-yellow-300" class="py-2 px-3 hover:text-yellow-200 transition-colors">Admin Portal</a>
-        <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="text-yellow-300" class="py-2 px-3 hover:text-yellow-200 transition-colors">Log in</a>
-        <a *ngIf="!isLoggedIn" routerLink="/register" routerLinkActive="text-yellow-300" class="py-2 px-3 hover:text-yellow-200 transition-colors">Register</a>
-        <div *ngIf="isLoggedIn" class="relative account-menu-container">
-          <button (click)="toggleAccountMenu()" class="flex items-center py-2 px-3 hover:text-yellow-200 transition-colors focus:outline-none">
-            <span class="mr-1">{{userName || 'Account'}}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <div *ngIf="showAccountMenu" class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg z-20">
-            <button (click)="logout()" class="w-full text-left px-4 py-2 hover:bg-red-50 transition-colors border-t border-gray-100">Log out</button>
-          </div>
-        </div>
-        <!-- Shopping cart -->
-        <a routerLink="/cart" class="flex items-center py-2 px-3 hover:text-yellow-200 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-          <span class="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+            <div class="hidden md:flex items-center space-x-4">
+                <a routerLink="/home" routerLinkActive="text-yellow-300"
+                   class="py-2 px-3 hover:text-yellow-200 transition-colors">Home</a>
+                <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="text-yellow-300"
+                   class="py-2 px-3 hover:text-yellow-200 transition-colors">Admin Portal</a>
+                <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="text-yellow-300"
+                   class="py-2 px-3 hover:text-yellow-200 transition-colors">Log in</a>
+                <a *ngIf="!isLoggedIn" routerLink="/register" routerLinkActive="text-yellow-300"
+                   class="py-2 px-3 hover:text-yellow-200 transition-colors">Register</a>
+                <div *ngIf="isLoggedIn" class="relative account-menu-container">
+                    <button (click)="toggleAccountMenu()"
+                            class="flex items-center py-2 px-3 hover:text-yellow-200 transition-colors focus:outline-none">
+                        <span class="mr-1">{{userName || 'Account'}}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div *ngIf="showAccountMenu"
+                         class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-md shadow-lg z-20">
+                        <button (click)="logout()"
+                                class="w-full text-left px-4 py-2 hover:bg-red-50 transition-colors border-t border-gray-100">
+                            Log out
+                        </button>
+                    </div>
+                </div>
+                <!-- Shopping cart -->
+                <a routerLink="/cart" class="flex items-center py-2 px-3 hover:text-yellow-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <span class="bg-yellow-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
             {{ cartItemCount }}
           </span>
-        </a>
-      </div>
+                </a>
+            </div>
+        </div>
     </div>
-  </div>
 </nav>

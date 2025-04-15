@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 
 export interface DecodedToken {
     sub?: string;
@@ -11,6 +11,7 @@ export interface DecodedToken {
     iss?: string;
     exp?: number;
     iat?: number;
+
     [key: string]: any;
 }
 
@@ -100,7 +101,7 @@ export class AuthService {
             'Authorization': `Bearer ${token}`
         });
 
-        return this.http.get<UserInfo>(`${this.baseUrl}/auth/me`, { headers }).pipe(
+        return this.http.get<UserInfo>(`${this.baseUrl}/auth/me`, {headers}).pipe(
             tap(userInfo => {
                 this.isAdminValue = userInfo.role?.name === 'ADMIN';
                 this.userInfoLoaded = true;

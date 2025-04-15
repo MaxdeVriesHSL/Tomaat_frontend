@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BeerType } from '../models/beer-type.model';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {BeerType} from '../models/beer-type.model';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +10,8 @@ export class BeerTypeService {
     private baseUrl = 'http://localhost:8080';
     private endpoint = `${this.baseUrl}/beerType`;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+    }
 
     public getAllBeerTypes(): Observable<BeerType[]> {
         return this.http.get<BeerType[]>(`${this.endpoint}/all`);
@@ -21,14 +22,14 @@ export class BeerTypeService {
     }
 
     public createBeerType(beerType: BeerType): Observable<HttpResponse<any>> {
-        return this.http.post(`${this.endpoint}/new`, beerType, { observe: 'response' });
+        return this.http.post(`${this.endpoint}/new`, beerType, {observe: 'response'});
     }
 
     public updateBeerType(id: string, beerType: BeerType): Observable<HttpResponse<any>> {
-        return this.http.put(`${this.endpoint}/${id}`, beerType, { observe: 'response' });
+        return this.http.put(`${this.endpoint}/${id}`, beerType, {observe: 'response'});
     }
 
     public deleteBeerType(id: string): Observable<HttpResponse<any>> {
-        return this.http.delete(`${this.endpoint}/${id}`, { observe: 'response' });
+        return this.http.delete(`${this.endpoint}/${id}`, {observe: 'response'});
     }
 }
