@@ -52,21 +52,9 @@ nav a.active::after {
     animation: fadeIn 0.2s ease-out forwards;
 }
 
-.mobile-menu-button {
-    transition: transform 0.3s ease;
-}
-
-.mobile-menu-button:hover {
-    transform: rotate(90deg);
-}
-
 @keyframes slideIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-.mobile-menu-open {
-    animation: slideIn 0.3s ease-out forwards;
 }
 
 @keyframes pulse {

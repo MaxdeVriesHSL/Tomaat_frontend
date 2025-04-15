@@ -5,7 +5,9 @@ import {FormsModule} from '@angular/forms';
 import {DatabaseService} from '../services/database.service';
 import {CartService} from '../services/cart.service';
 import {AuthService} from '../services/auth.service';
+import {BeerTypeService} from '../services/beer-type.service';
 import {Beer} from '../models/beer.model';
+import {BeerType} from '../models/beer-type.model';
 
 @Component({
     selector: 'app-home',
@@ -26,26 +28,20 @@ export class HomeComponent implements OnInit {
     selectedType: string = '';
     sortOption: string = 'name';
 
-    beerTypes: string[] = [
-        'IPA',
-        'Stout',
-        'Tripel',
-        'Quadrupel',
-        'Belgian Ales',
-        'Wheat',
-        'Bocks',
-        'Homebrew'
-    ];
+    beerTypes: BeerType[] = [];
+    loadingBeerTypes: boolean = true;
 
     constructor(
         private databaseService: DatabaseService,
         private cartService: CartService,
-        private authService: AuthService
+        private authService: AuthService,
+        private beerTypeService: BeerTypeService
     ) {
     }
 
     ngOnInit(): void {
         this.loadBeers();
+        this.loadBeerTypes();
     }
 
     loadBeers(): void {
@@ -62,6 +58,21 @@ export class HomeComponent implements OnInit {
             error: (error) => {
                 this.loading = false;
                 this.errorMessage = 'Failed to load beers. Please try again later.';
+            }
+        });
+    }
+
+    loadBeerTypes(): void {
+        this.loadingBeerTypes = true;
+
+        this.beerTypeService.getAllBeerTypes().subscribe({
+            next: (beerTypes) => {
+                this.beerTypes = beerTypes;
+                this.loadingBeerTypes = false;
+            },
+            error: (error) => {
+                this.loadingBeerTypes = false;
+                console.error('Failed to load beer types', error);
             }
         });
     }
@@ -126,7 +137,6 @@ export class HomeComponent implements OnInit {
     addToCart(beer: Beer): void {
         if (!this.authService.isLoggedIn()) {
             this.showNotification("Please log in to add items to your cart");
-
             return;
         }
 

@@ -3,11 +3,18 @@
         <h1 class="tomaat-title text-2xl font-bold text-red-700 mb-6">Beer Management Portal</h1>
 
         <div class="flex flex-col sm:flex-row justify-between mb-6 gap-4">
-            <button
-                    (click)="showAddBeerForm()"
-                    class="bg-green-600 text-white px-4 py-2 rounded flex items-center hover:bg-green-700 transition">
-                <span class="mr-1">+</span> Add New Beer
-            </button>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <button
+                        (click)="showAddBeerForm()"
+                        class="bg-green-600 text-white px-4 py-2 rounded flex items-center hover:bg-green-700 transition">
+                    <span class="mr-1">+</span> Add New Beer
+                </button>
+                <button
+                        (click)="showAddBeerTypeForm()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded flex items-center hover:bg-blue-700 transition">
+                    <span class="mr-1">+</span> Manage Beer Types
+                </button>
+            </div>
             <div class="flex flex-col sm:flex-row gap-2">
                 <input
                         type="text"
@@ -135,7 +142,7 @@
         </div>
     </div>
 
-    <!-- Add/Edit -->
+    <!-- Add/edit beer -->
     <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg w-full max-w-2xl mx-4 overflow-hidden shadow-xl">
             <div class="px-6 py-4 bg-red-600 text-white flex justify-between items-center">
@@ -161,15 +168,15 @@
                             </div>
                         </div>
                         <div>
-                            <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                            <label for="beerTypeId" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                             <select
-                                    id="type"
-                                    formControlName="type"
+                                    id="beerTypeId"
+                                    formControlName="beerTypeId"
                                     class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
                                 <option value="">Select a type</option>
-                                <option *ngFor="let type of beerTypes" [value]="type">{{ type }}</option>
+                                <option *ngFor="let type of beerTypes" [value]="type.id">{{ type.name }}</option>
                             </select>
-                            <div *ngIf="beerForm.get('type')?.invalid && beerForm.get('type')?.touched" class="text-red-500 text-xs mt-1">
+                            <div *ngIf="beerForm.get('beerTypeId')?.invalid && beerForm.get('beerTypeId')?.touched" class="text-red-500 text-xs mt-1">
                                 Type is required
                             </div>
                         </div>
@@ -262,7 +269,85 @@
         </div>
     </div>
 
-    <!-- Delete confirmation -->
+    <!-- Add/edit beer type  -->
+    <div *ngIf="showBeerTypeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden shadow-xl">
+            <div class="px-6 py-4 bg-blue-600 text-white flex justify-between items-center">
+                <h2 class="text-xl font-bold">{{ isBeerTypeEditMode ? 'Edit Beer Type' : 'Add New Beer Type' }}</h2>
+                <button (click)="closeBeerTypeModal()" class="text-white hover:text-gray-200 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <form [formGroup]="beerTypeForm" (ngSubmit)="saveBeerType()">
+                    <div class="mb-4">
+                        <label for="typeName" class="block text-sm font-medium text-gray-700 mb-1">Type Name</label>
+                        <input
+                                type="text"
+                                id="typeName"
+                                formControlName="name"
+                                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <div *ngIf="beerTypeForm.get('name')?.invalid && beerTypeForm.get('name')?.touched" class="text-red-500 text-xs mt-1">
+                            Type name is required
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button
+                                type="button"
+                                (click)="closeBeerTypeModal()"
+                                class="border border-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hover:bg-gray-100 transition">
+                            Cancel
+                        </button>
+                        <button
+                                type="submit"
+                                [disabled]="beerTypeForm.invalid || submitting"
+                                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition">
+                            {{ isBeerTypeEditMode ? 'Update Type' : 'Add Type' }}
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Beer types -->
+                <div class="mt-6 border-t pt-6">
+                    <h3 class="text-lg font-semibold mb-3">Current Beer Types</h3>
+                    <div class="overflow-y-auto max-h-64">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b text-left">Name</th>
+                                <th class="px-4 py-2 border-b text-right">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let beerType of beerTypes" class="hover:bg-gray-50">
+                                <td class="px-4 py-2 border-b">{{ beerType.name }}</td>
+                                <td class="px-4 py-2 border-b text-right">
+                                    <div class="flex justify-end space-x-2">
+                                        <button
+                                                (click)="editBeerType(beerType)"
+                                                class="bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 transition">
+                                            Edit
+                                        </button>
+                                        <button
+                                                (click)="confirmDeleteBeerType(beerType)"
+                                                class="bg-red-500 text-white px-2 py-1 rounded text-sm hover:bg-red-600 transition">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p *ngIf="beerTypes.length === 0" class="text-center py-4 text-gray-500">No beer types found. Add one to get started.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--  Delete beer -->
     <div *ngIf="showDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden shadow-xl">
             <div class="p-6">
@@ -278,6 +363,31 @@
                     <button
                             type="button"
                             (click)="deleteBeer()"
+                            class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    Delete beertype -->
+    <div *ngIf="showBeerTypeDeleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-full max-w-md mx-4 overflow-hidden shadow-xl">
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Confirm Beer Type Deletion</h3>
+                <p class="text-gray-700 mb-2">Are you sure you want to delete beer type "{{ beerTypeToDelete?.name }}"?</p>
+                <p class="text-yellow-700 text-sm mb-6 bg-yellow-50 p-2 rounded">Warning: This might affect beers associated with this type.</p>
+                <div class="flex justify-end">
+                    <button
+                            type="button"
+                            (click)="cancelDeleteBeerType()"
+                            class="border border-gray-300 text-gray-700 px-4 py-2 rounded mr-2 hover:bg-gray-100 transition">
+                        Cancel
+                    </button>
+                    <button
+                            type="button"
+                            (click)="deleteBeerType()"
                             class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
                         Delete
                     </button>

@@ -18,7 +18,6 @@ import { Subscription } from 'rxjs';
 export class NavbarComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
-  isMobileMenuOpen: boolean = false;
   showAccountMenu: boolean = false;
   cartItemCount: number = 0;
   userName: string = '';
@@ -66,10 +65,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.isLoggedIn) {
       this.authService.loadUserInfo().subscribe();
     }
-  }
-
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   toggleAccountMenu(): void {
